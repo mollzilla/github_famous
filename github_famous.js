@@ -6,54 +6,54 @@ let createdAt;//=document.querySelector(".created-at")
 let htmlURL;//=document.querySelector(".html-url")
 let followers;//=document.querySelector(".followers")
 
-let card=document.createElement('div') 
-card.classList.add("card", "text-white", "bg-dark", "mb-3", "p-5")
+let card=document.createElement('div');
+card.classList.add("card", "text-white", "bg-dark", "mb-3", "p-5");
 card.style.maxWidth='18rem';
 
-let header=document.createElement('div') 
-header.classList.add("card-header")
+let header=document.createElement('div');
+header.classList.add("card-header");
 
-let img=document.createElement('img') 
-img.classList.add("card-img-top", "user-img")
+let img=document.createElement('img'); 
+img.classList.add("card-img-top", "user-img");
 
-let cardBody=document.createElement('div') 
-cardBody.classList.add("card-body")
+let cardBody=document.createElement('div'); 
+cardBody.classList.add("card-body");
 
-let cardHeaderTitle=document.createElement('h4') 
-cardHeaderTitle.classList.add("card")
+let cardHeaderTitle=document.createElement('h4'); 
+cardHeaderTitle.classList.add("card");
 
-let cardTitle=document.createElement('h5') 
-cardTitle.classList.add("card-title", "username-title")
+let cardTitle=document.createElement('h5'); 
+cardTitle.classList.add("card-title", "username-title");
 
-let fameTitle=document.createElement('h5') 
-fameTitle.classList.add("card-title", "username-title")
+let fameTitle=document.createElement('h5'); 
+fameTitle.classList.add("card-title", "username-title");
 
-let list=document.createElement('ul') 
-list.classList.add("list-group", "list-group-flush", "text-center")
+let list=document.createElement('ul'); 
+list.classList.add("list-group", "list-group-flush", "text-center");
 
-let createdAtLi=document.createElement('li') 
-createdAtLi.classList.add("list-group-item", "text-white", "bg-dark")
+let createdAtLi=document.createElement('li');
+createdAtLi.classList.add("list-group-item", "text-white", "bg-dark");
 
-let publicReposLi=document.createElement('li') 
-publicReposLi.classList.add("list-group-item", "text-white", "bg-dark", "public-repos")
+let publicReposLi=document.createElement('li');
+publicReposLi.classList.add("list-group-item", "text-white", "bg-dark", "public-repos");
 
 let followersLi=document.createElement('li')
-followersLi.classList.add("list-group-item", "text-white", "bg-dark", "followers")
+followersLi.classList.add("list-group-item", "text-white", "bg-dark", "followers");
 
-list.appendChild(createdAtLi)
-list.appendChild(publicReposLi)
-list.appendChild(followersLi)
+list.appendChild(createdAtLi);
+list.appendChild(publicReposLi);
+list.appendChild(followersLi);
 
-let linkWrapper=document.createElement('div') 
-linkWrapper.classList.add("text-center")
+let linkWrapper=document.createElement('div');
+linkWrapper.classList.add("text-center");
 
-let link=document.createElement('a') 
-link.classList.add("btn", "btn-secondary", "btn-lg", "active", "html-url")
-link.setAttribute('role', 'button')
-link.setAttribute('aria-pressed', 'true')
+let link=document.createElement('a');
+link.classList.add("btn", "btn-secondary", "btn-lg", "active", "html-url");
+link.setAttribute('role', 'button');
+link.setAttribute('aria-pressed', 'true');
 link.textContent="Visitar su GIthub!"
 
-linkWrapper.appendChild(link)
+linkWrapper.appendChild(link);
 
 cardBody.appendChild(cardTitle);
 cardBody.appendChild(fameTitle);
@@ -71,60 +71,59 @@ cardHeaderTitle.innerHTML="RESULTADOS <br/> TU FAMA DEL 1 AL 10"
 function fetchGit(userName) {
   fetch(`https://api.github.com/users/`+userName)
   .then(response => {
-    console.log(response)
+    console.log(response);
 
     if(response.status==403)
-    throw new Error("Github te pateó porque hiciste demasiadas búsquedas")
+    throw new Error("Github te pateó porque hiciste demasiadas búsquedas");
     else if(response.status!=200)
-      throw new Error("Usuario no encontrado")
+      throw new Error("Usuario no encontrado");
     else
-      return response.json()
+      return response.json();
   })
   .then(data => {
-    console.log(data)
-    console.log(data.followers)
+    console.log(data);
+    console.log(data.followers);
     userData=data;
 
-    cardTitle.textContent=data.login
-    createdAtLi.textContent=`Usuario creado el ${(new Date (data.created_at)).toLocaleString()}`
-    followersLi.textContent=`${data.login} tiene ${data.followers} seguidores.`
-    publicReposLi.textContent=`Cuenta con ${data.public_repos} repositorios públicos!`
+    cardTitle.textContent=data.login;
+    createdAtLi.textContent=`Usuario creado el ${(new Date (data.created_at)).toLocaleString()}`;
+    followersLi.textContent=`${data.login} tiene ${data.followers} seguidores.`;
+    publicReposLi.textContent=`Cuenta con ${data.public_repos} repositorios públicos!`;
     fameTitle.textContent="Popularidad nivel: " + Math.floor(Math.log(data.followers, 121312));
 
     let scaleBroke=null;
 
-    if (Math.floor(Math.log(data.followers, 121312)))
+    if (Math.floor(Math.log(data.followers, 121312))>10)
     {
-      scaleBroke=document.createElement('h5') 
-      scaleBroke.classList.add("card-title", "username-title")
-      scaleBroke.textContent=("ME ROMPISTE LA ESCALA DE TANTA POPULARIDAD!!!!")
+      scaleBroke=document.createElement('h5');
+      scaleBroke.classList.add("card-title", "username-title", "bg-light");
+      scaleBroke.textContent=("ME ROMPISTE LA ESCALA DE TANTA POPULARIDAD!!!!");
     }
 
-    img.setAttribute('src', data.avatar_url)
-    link.setAttribute('href', data.html_url)
+    img.setAttribute('src', data.avatar_url);
+    link.setAttribute('href', data.html_url);
 
-    resultsDiv.appendChild(cardHeaderTitle)
+    resultsDiv.appendChild(cardHeaderTitle);
     if(scaleBroke!=null)
     resultsDiv.appendChild(scaleBroke);
 
     resultsDiv.appendChild(card);
 
-    document.querySelector(".results-div").classList.remove("d-none")
+    document.querySelector(".results-div").classList.remove("d-none");
 
   })
   .catch(err => {
     console.log(err);
     cardHeaderTitle.textContent=err;
     resultsDiv.appendChild(cardHeaderTitle);
-    document.querySelector(".results-div").classList.remove("d-none")
+    document.querySelector(".results-div").classList.remove("d-none");
   })
 }
 
 boton.addEventListener('click', function(e) {
   e.preventDefault();
   let userSearch=document.querySelector('.username').value;
-  fetchGit(userSearch)
-  boton.style.display="none";
+  fetchGit(userSearch);
 });
 
 
