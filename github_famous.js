@@ -22,6 +22,9 @@ cardBody.classList.add("card-body");
 let cardHeaderTitle=document.createElement('h4'); 
 cardHeaderTitle.classList.add("card");
 
+let cardErrTitle=document.createElement('h4'); 
+cardErrTitle.classList.add("card");
+
 let cardTitle=document.createElement('h5'); 
 cardTitle.classList.add("card-title", "username-title");
 
@@ -76,7 +79,10 @@ function fetchGit(userName) {
     if(response.status==403)
     throw new Error("Github te pateó porque hiciste demasiadas búsquedas");
     else if(response.status!=200)
+    {
+      card.style.display="none";
       throw new Error("Usuario no encontrado");
+    }
     else
       return response.json();
   })
@@ -110,12 +116,17 @@ function fetchGit(userName) {
     resultsDiv.appendChild(card);
 
     document.querySelector(".results-div").classList.remove("d-none");
+    cardHeaderTitle.style.display="block";
+    card.style.display="block";
 
+    cardErrTitle.style.display="none";
   })
   .catch(err => {
     console.log(err);
-    cardHeaderTitle.textContent=err;
-    resultsDiv.appendChild(cardHeaderTitle);
+    cardErrTitle.textContent=err;
+    cardHeaderTitle.style.display="none";
+    cardErrTitle.style.display="block";
+    resultsDiv.appendChild(cardErrTitle);
     document.querySelector(".results-div").classList.remove("d-none");
   })
 }
